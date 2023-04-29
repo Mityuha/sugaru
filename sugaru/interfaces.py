@@ -2,9 +2,18 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
 
 
+__all__ = [
+    "Plugin",
+    "SugarFileLoader",
+    "FinalFileWriter",
+    "PluginLoader",
+    "PluginNamesFetcher",
+]
+
+
 @runtime_checkable
 class Plugin(Protocol):
-    def parse(
+    def __call__(
         self,
         *,
         section_body: Dict[str, Any],
@@ -15,17 +24,17 @@ class Plugin(Protocol):
 
 
 class SugarFileLoader(Protocol):
-    def load(self, path: Path) -> Dict[str, Any]:
+    def __call__(self, path: Path) -> Dict[str, Any]:
         ...
 
 
 class FinalFileWriter(Protocol):
-    def write(self, *, path: Path, content: Dict[str, Any]) -> None:
+    def __call__(self, *, path: Path, content: Dict[str, Any]) -> None:
         ...
 
 
 class PluginLoader(Protocol):
-    def load(
+    def __call__(
         self,
         plugin_name: str,
         *,
@@ -35,5 +44,5 @@ class PluginLoader(Protocol):
 
 
 class PluginNamesFetcher(Protocol):
-    def plugin_name_list(self) -> List[str]:
+    def __call__(self) -> List[str]:
         ...
