@@ -18,10 +18,10 @@ class Plugin(Protocol):
     def __call__(
         self,
         *,
-        section_body: Dict[str, Section],
+        section: Section,
         section_name: SecName = "",
         **kwargs: Any,
-    ) -> Dict[str, Any]:
+    ) -> Section:
         ...
 
 

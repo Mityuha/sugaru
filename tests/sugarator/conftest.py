@@ -26,7 +26,9 @@ def sugarate_args(mocker: Any, faker: Any) -> SugarateArgs:
             ]
         ),
         "plugin_loader": mocker.Mock(side_effect=[[mocker.Mock()]]),
-        "sugar_file_loader": mocker.Mock(side_effect={}),
+        "sugar_file_loader": mocker.Mock(
+            side_effect=[{faker.pystr(): faker.pydict() for _ in range(faker.pyint(max_value=20))}]
+        ),
         "final_file_writer": mocker.Mock(),
         "sugar_file_path": Path(faker.pystr()),
         "final_file_path": Path(faker.pystr()),
