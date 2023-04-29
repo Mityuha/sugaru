@@ -62,49 +62,21 @@ packages = [
 trio_mode = "true"
 
 [tool.poetry.dependencies]
-python = ">=3.6.2"
+python = ">=3.7"
 
 [tool.poetry.dev-dependencies]
 black = "*"
-pydocstringformatter = [
-    {version = "*", python = ">=3.8"},
-]
+mypy = ">1.0.0"
 isort = "*"
-mypy = "*"
 pre-commit = "*"
-pylint = "*"
+ruff = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-trio = "*"
 autoflake = "*"
 pytest-mock = "*"
-trio = "*"
 sort-all = "*"
-tox = "*"
-# documentation
-mkdocs = "^1.3.1"
-mkautodoc = "^0.2.0"
-pymdown-extensions = "^9.1"
-mkdocs-material = "^8.2.11"
-jinja2 = "^3.0.3"
-
-[tool.pylint]
-# https://pylint.pycqa.org/en/latest/user_guide/configuration/all-options.html
-[tool.pylint.master]
-jobs = 0
-disable = ["unnecessary-dunder-call"]
-ignore = ["CVS", "examples/"]
-[tool.pylint.messages_control]
-max-line-length = 120
-[tool.pylint.classes]
-exclude-protected = ['_asdict', '_fields', '_replace', '_source', '_make', "_name"]
-valid-classmethod-first-arg = "cls"
-[tool.pylint.design]
-max-branches = 15
-max-returns = 8
-max-statements = 50
-min-public-methods = 0
-
+trio = "*"
 
 [tool.mypy]
 # https://mypy.readthedocs.io/en/stable/config_file.html
