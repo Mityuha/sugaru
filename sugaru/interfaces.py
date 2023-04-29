@@ -1,13 +1,15 @@
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
 
+from .types import SecName, Section
+
 
 __all__ = [
-    "Plugin",
-    "SugarFileLoader",
     "FinalFileWriter",
+    "Plugin",
     "PluginLoader",
     "PluginNamesFetcher",
+    "SugarFileLoader",
 ]
 
 
@@ -16,20 +18,20 @@ class Plugin(Protocol):
     def __call__(
         self,
         *,
-        section_body: Dict[str, Any],
-        section_name: str = "",
+        section_body: Dict[str, Section],
+        section_name: SecName = "",
         **kwargs: Any,
     ) -> Dict[str, Any]:
         ...
 
 
 class SugarFileLoader(Protocol):
-    def __call__(self, path: Path) -> Dict[str, Any]:
+    def __call__(self, path: Path) -> Dict[SecName, Section]:
         ...
 
 
 class FinalFileWriter(Protocol):
-    def __call__(self, *, path: Path, content: Dict[str, Any]) -> None:
+    def __call__(self, *, path: Path, content: Dict[SecName, Section]) -> None:
         ...
 
 

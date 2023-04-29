@@ -1,16 +1,11 @@
 repos:
   - repo: local
     hooks:
-      - id: pydocstringformatter
-        name: pydocstringformatter
+      - id: docformatter
+        name: docformatter 
         description: "Formats docstrings to follow PEP8 and PEP257."
         language: system
-        entry: poetry run pydocstringformatter
-        args:
-          [
-            "-w",
-            "--max-line-length=120",
-          ]
+        entry: poetry run docformatter
         types: [python]
       - id: isort
         name: isort
@@ -32,11 +27,11 @@ repos:
         types: [python]
         require_serial: true
         exclude: examples
-      - id: pylint
-        name: pylint
+      - id: ruff
+        name: ruff
         stages: [commit]
         language: system
-        entry: poetry run pylint
+        entry: poetry run ruff
         types: [python]
         exclude: examples
       - id: sort-all
