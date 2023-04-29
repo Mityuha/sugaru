@@ -45,6 +45,8 @@ def sugarate(
         logger.warning("No one plugin was loaded, returning...")
         return
 
+    logger.debug(f"Plugins loaded: {list(plugins.keys())}")
+
     sections: Dict[SecName, Section] = sugar_file_loader(sugar_file_path)
     sugar_sections: Dict[SecName, Section] = dict(sections)  # deep copy should be here
 
