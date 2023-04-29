@@ -82,7 +82,7 @@ ignore_missing_imports = true
 disallow_incomplete_defs = true
 
 [tool.ruff]
-line-length = 99
+ignore = ["E501"]
 
 
 [tool.coverage]
