@@ -1,7 +1,7 @@
 from random import choice
 from typing import Any
 
-from sugaru.plugin_loader import load_module, load_plugins
+from sugaru.plugin_loader import load_module, load_objects
 from . import PluginContent, PluginPath
 
 
@@ -12,7 +12,7 @@ def test_load_single_object(plugin_path: PluginPath, plugin_content: PluginConte
 
     module = load_module(plugin_to_load)
     assert module
-    plugin_classes = load_plugins(module, plugin_name=plugin_to_load)
+    plugin_classes = load_objects(module, plugin_name=plugin_to_load)
 
     assert len(plugin_classes) == 1
     assert plugin_classes[0].__name__ == plugin_name
@@ -25,7 +25,7 @@ def test_load_all_objects_in_module(
 
     module = load_module(plugin_to_load)
     assert module
-    object_classes = load_plugins(module, plugin_name=plugin_to_load)
+    object_classes = load_objects(module, plugin_name=plugin_to_load)
 
     assert {p.__name__ for p in object_classes} == set(plugin_content.object_names)
 
@@ -34,5 +34,5 @@ def test_load_unknown_object(plugin_path: PluginPath, faker: Any) -> None:
     module = load_module(plugin_path.py_path)
     assert module
 
-    empty_objects = load_plugins(module, plugin_name=f"{plugin_path.py_path}{faker.pystr()}")
+    empty_objects = load_objects(module, plugin_name=f"{plugin_path.py_path}{faker.pystr()}")
     assert empty_objects == []

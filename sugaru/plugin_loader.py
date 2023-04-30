@@ -24,7 +24,7 @@ def load_module(plugin_name: str) -> Optional[ModuleType]:
     return None
 
 
-def load_plugins(
+def load_objects(
     module: ModuleType,
     *,
     plugin_name: str,
@@ -73,11 +73,13 @@ class SimplePluginLoader:
             logger.info(f"Cannot load module by plugin name '{plugin_name}'")
             return []
 
-        plugin_classes: List[Type[Plugin]] = load_plugins(module, plugin_name=plugin_name)
+        object_classes: List[Type[Plugin]] = load_objects(module, plugin_name=plugin_name)
 
         logger.debug(
-            f"Plugins loaded by plugin name '{plugin_name}': {[p.__name__ for p in plugin_classes]}"
+            f"Plugins loaded by plugin name '{plugin_name}': {[p.__name__ for p in object_classes]}"
         )
+
+        plugin_classes: List[Type[Plugin]] = check_plugins_signatures(object_classes)
 
         plugin_objects: List[Plugin] = create_objects(plugin_classes)
 
