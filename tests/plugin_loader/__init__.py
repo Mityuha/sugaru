@@ -1,1 +1,1 @@
-from .conftest import PluginPath
+from .conftest import PluginContent, PluginPath

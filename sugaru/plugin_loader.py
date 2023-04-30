@@ -1,5 +1,5 @@
 from importlib import import_module
-from inspect import getmembers, isclass, isfunction
+from inspect import Signature, getmembers, isclass, isfunction, signature
 from types import ModuleType
 from typing import List, Optional, Type
 
@@ -29,22 +29,37 @@ def load_plugins(
     *,
     plugin_name: str,
 ) -> List[Type[Plugin]]:
-    classes: List[Type[Plugin]] = []
     if module.__name__ == plugin_name:
         logger.trace(f"Loading all module '{plugin_name}' objects")
-        classes = [
+        return [
             v for _, v in getmembers(module, predicate=lambda obj: isclass(obj) or isfunction(obj))
         ]
     else:
         module_name, plugin_name = plugin_name.rsplit(".", maxsplit=1)
-        logger.trace(f"Loading single plugin '{plugin_name}' in module '{module_name}'")
-        # try:
-        classes = [getattr(module, plugin_name)]
-        # except AttributeError:
-        #     logger.warning(f"No plugin '{plugin_name}' found in module {module.__name__}")
-        #     return []
+        logger.trace(f"Loading single object '{plugin_name}' in module '{module_name}'")
+        try:
+            return [getattr(module, plugin_name)]
+        except AttributeError:
+            logger.warning(f"No object called '{plugin_name}' found in module {module.__name__}")
+            return []
 
-    return classes
+
+def check_plugins_signatures(plugin_classes: List[Type[Plugin]]) -> List[Type[Plugin]]:
+    for obj in plugin_classes:
+        if isclass(obj) and hasattr(obj, "__call__"):
+            logger.trace(f"Plugin '{obj.__name__}' is a class and callable")
+        elif isfunction(obj):
+            logger.trace(f"Plugin '{obj.__name__}' is a function")
+        else:
+            logger.trace(
+                f"Plugin '{obj.__name__}' is neither class with __call__ nor function. skip"
+            )
+            continue
+
+        sign: Signature = signature(obj)
+        print(sign)
+
+    return []
 
 
 def create_objects(plugin_classes: List[Type[Plugin]]) -> List[Plugin]:
