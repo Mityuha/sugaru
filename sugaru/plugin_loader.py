@@ -1,7 +1,7 @@
 from importlib import import_module
 from inspect import Signature, getmembers, isclass, isfunction, signature
 from types import ModuleType
-from typing import List, Optional, Type
+from typing import Any, Dict, List, Optional, Type
 
 from .interfaces import Plugin
 from .logging import logger
@@ -44,22 +44,43 @@ def load_objects(
             return []
 
 
-def check_plugins_signatures(plugin_classes: List[Type[Plugin]]) -> List[Type[Plugin]]:
-    for obj in plugin_classes:
+def check_plugins_signatures(object_classes: List[Type[Plugin]]) -> List[Type[Plugin]]:
+    standard: Signature = signature(Plugin.__call__)
+    standard_params: Dict[str, Any] = {
+        p.name: p.annotation
+        for p in standard.parameters.values()
+        if p.name not in ("self", "kwargs")
+    }
+    plugin_classes: List[Type[Plugin]] = []
+    for obj in object_classes:
+        sign: Signature
         if isclass(obj) and hasattr(obj, "__call__"):
             logger.trace(f"Plugin '{obj.__name__}' is a class and callable")
+            sign = signature(obj.__call__)
         elif isfunction(obj):
             logger.trace(f"Plugin '{obj.__name__}' is a function")
+            sign = signature(obj)
         else:
             logger.trace(
                 f"Plugin '{obj.__name__}' is neither class with __call__ nor function. skip"
             )
             continue
 
-        sign: Signature = signature(obj)
-        print(sign)
+        obj_params: Dict[str, Any] = {
+            p.name: p.annotation
+            for p in standard.parameters.values()
+            if p.name not in ("self", "kwargs")
+        }
 
-    return []
+        if obj_params != standard_params or sign.return_annotation != standard.return_annotation:
+            logger.warning(
+                f"Plugin '{obj.__name__}' has bad signature. Please, check class 'Plugin' signature."
+            )
+            continue
+
+        plugin_classes.append(obj)
+
+    return plugin_classes
 
 
 def create_objects(plugin_classes: List[Type[Plugin]]) -> List[Plugin]:
@@ -75,12 +96,23 @@ class SimplePluginLoader:
 
         object_classes: List[Type[Plugin]] = load_objects(module, plugin_name=plugin_name)
 
-        logger.debug(
-            f"Plugins loaded by plugin name '{plugin_name}': {[p.__name__ for p in object_classes]}"
+        logger.trace(
+            f"Objects loaded by plugin name '{plugin_name}': {[obj.__name__ for obj in object_classes]}"
         )
 
         plugin_classes: List[Type[Plugin]] = check_plugins_signatures(object_classes)
 
+        logger.debug(
+            f"Plugin '{plugin_name}' classes after signature check: {[p.__name__ for p in plugin_classes]}"
+        )
+
         plugin_objects: List[Plugin] = create_objects(plugin_classes)
+
+        def plug_name(obj):
+            return obj.__name__ if isfunction(obj) else type(obj).__name__
+
+        logger.debug(
+            f"Plugin '{plugin_name}' objects after plugin class instantiating: {[plug_name(p) for p in plugin_objects]}"
+        )
 
         return plugin_objects
