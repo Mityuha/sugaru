@@ -1,4 +1,5 @@
 from importlib import import_module
+from inspect import getmembers, isclass, isfunction
 from types import ModuleType
 from typing import List, Optional, Type
 
@@ -28,7 +29,22 @@ def load_plugins(
     *,
     plugin_name: str,
 ) -> List[Type[Plugin]]:
-    return []
+    classes: List[Type[Plugin]] = []
+    if module.__name__ == plugin_name:
+        logger.trace(f"Loading all module '{plugin_name}' objects")
+        classes = [
+            v for _, v in getmembers(module, predicate=lambda obj: isclass(obj) or isfunction(obj))
+        ]
+    else:
+        module_name, plugin_name = plugin_name.rsplit(".", maxsplit=1)
+        logger.trace(f"Loading single plugin '{plugin_name}' in module '{module_name}'")
+        # try:
+        classes = [getattr(module, plugin_name)]
+        # except AttributeError:
+        #     logger.warning(f"No plugin '{plugin_name}' found in module {module.__name__}")
+        #     return []
+
+    return classes
 
 
 def create_objects(plugin_classes: List[Type[Plugin]]) -> List[Plugin]:

@@ -85,7 +85,7 @@ disallow_incomplete_defs = true
 [tool.ruff]
 ignore = ["E501"]
 [tool.ruff.per-file-ignores]
-"__init__.py" = ["F403"]
+"__init__.py" = ["F403", "F401"]
 
 
 [tool.coverage]
