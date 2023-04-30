@@ -83,8 +83,17 @@ def check_plugins_signatures(object_classes: List[Type[Plugin]]) -> List[Type[Pl
     return plugin_classes
 
 
-def create_objects(plugin_classes: List[Type[Plugin]]) -> List[Plugin]:
-    return []
+def create_object(plugin_class: Type[Plugin]) -> Optional[Plugin]:
+    if isclass(plugin_class):
+        try:
+            return plugin_class()
+        except TypeError:
+            return None
+
+    elif isfunction(plugin_class):
+        return plugin_class
+
+    return None
 
 
 class SimplePluginLoader:
@@ -106,7 +115,15 @@ class SimplePluginLoader:
             f"Plugin '{plugin_name}' classes after signature check: {[p.__name__ for p in plugin_classes]}"
         )
 
-        plugin_objects: List[Plugin] = create_objects(plugin_classes)
+        plugin_objects: List[Plugin] = []
+        for plugin_class in plugin_classes:
+            obj: Optional[Plugin] = create_object(plugin_class)
+            if not obj:
+                logger.info(
+                    f"Plugin '{plugin_class.__name__}' can't be created in a simple way. Skip."
+                )
+                continue
+            plugin_objects.append(obj)
 
         def plug_name(obj):
             return obj.__name__ if isfunction(obj) else type(obj).__name__
