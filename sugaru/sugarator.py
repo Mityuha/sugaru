@@ -31,10 +31,7 @@ def sugarate(
     plugin_name: str
     plugins: Dict[str, Plugin] = {}
     for plugin_name in plugin_name_list:
-        plugin: Optional[Plugin] = plugin_loader(
-            plugin_name,
-            path_candidates=[],
-        )
+        plugin: Optional[Plugin] = plugin_loader(plugin_name)
         if not plugin:
             logger.warning(f"Unable to load plugin '{plugin_name}', skip")
             continue

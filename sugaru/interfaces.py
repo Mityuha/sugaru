@@ -39,8 +39,6 @@ class PluginLoader(Protocol):
     def __call__(
         self,
         plugin_name: str,
-        *,
-        path_candidates: List[Path],
     ) -> Optional[Plugin]:
         ...
 
