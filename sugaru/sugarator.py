@@ -1,12 +1,27 @@
 from pathlib import Path
-from typing import Dict, List, Optional
+from types import MappingProxyType
+from typing import Any, Dict, List, Optional
 
 from .interfaces import FinalFileWriter, Plugin, PluginLoader, PluginNamesFetcher, SugarFileLoader
 from .logging import logger
-from .types import SecName, Section
+from .types import SecName, Section, SectionMap
 
 
 __all__ = ["sugarate"]
+
+
+def immutable_section_map(mutable_sections: Dict[SecName, Section]) -> SectionMap:
+    sections: Any = {}
+    for name, section in mutable_sections.items():
+        new_section: Any = section
+        if isinstance(section, dict):
+            new_section = MappingProxyType(section)
+        elif isinstance(section, list):
+            new_section = tuple(section)
+
+        sections[name] = new_section
+
+    return sections
 
 
 def sugarate(
@@ -44,8 +59,8 @@ def sugarate(
 
     logger.debug(f"Plugins loaded: {list(plugins.keys())}")
 
-    sections: Dict[SecName, Section] = sugar_file_loader(sugar_file_path)
-    sugar_sections: Dict[SecName, Section] = dict(sections)  # deep copy should be here
+    sections: SectionMap = immutable_section_map(sugar_file_loader(sugar_file_path))
+    sugar_sections: Dict[SecName, Section] = {}
 
     section: Section
     section_name: str
@@ -54,6 +69,7 @@ def sugarate(
             plugin(
                 section_name=section_name,
                 section=section,
+                sections=sections,
             )
             sugar_sections[section_name] = sugar_sections
 

@@ -4,6 +4,7 @@ from typing import List, Type
 
 from ..interfaces import Plugin
 from ..logging import logger
+from .utils import is_builtin
 
 
 def load_objects(
@@ -14,7 +15,11 @@ def load_objects(
     if module.__name__ == plugin_name:
         logger.trace(f"Loading all module '{plugin_name}' objects")
         return [
-            v for _, v in getmembers(module, predicate=lambda obj: isclass(obj) or isfunction(obj))
+            v
+            for _, v in getmembers(
+                module,
+                predicate=lambda obj: (isclass(obj) or isfunction(obj)) and not is_builtin(obj),
+            )
         ]
     else:
         module_name, plugin_name = plugin_name.rsplit(".", maxsplit=1)

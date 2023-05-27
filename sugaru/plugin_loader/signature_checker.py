@@ -1,9 +1,9 @@
-import builtins
 from inspect import Signature, isclass, isfunction, signature
 from typing import Any, Dict, List, Type
 
 from ..interfaces import Plugin
 from ..logging import logger
+from .utils import is_builtin
 
 
 def check_plugins_signatures(object_classes: List[Type[Plugin]]) -> List[Type[Plugin]]:
@@ -14,9 +14,8 @@ def check_plugins_signatures(object_classes: List[Type[Plugin]]) -> List[Type[Pl
         if p.name not in ("self", "kwargs")
     }
     plugin_classes: List[Type[Plugin]] = []
-    builtin_types: List[str] = dir(builtins)
     for obj in object_classes:
-        if obj.__name__ in builtin_types:
+        if is_builtin(obj):
             continue
 
         sign: Signature
