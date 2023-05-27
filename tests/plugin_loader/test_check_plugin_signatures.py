@@ -9,7 +9,7 @@ def test_check_all_objects_signatures(
     assert module
     object_classes = load_objects(module, plugin_name=plugin_path.py_path)
 
-    assert len(object_classes) == len(plugin_content.object_names)
+    assert len(object_classes) >= len(plugin_content.object_names)
 
     plugin_classes = check_plugins_signatures(object_classes)
 

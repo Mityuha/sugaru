@@ -26,13 +26,13 @@ def plugin_content() -> PluginContent:
     plugin_name: str = "MultiPluginTest"
     plugin_content: str = "\n\n".join(
         f"""
-from sugaru import Section
+from sugaru import Section, SecName, SectionMap
 class {plugin_name}{i}:
     @staticmethod
-    def __call__(*, section: Section, section_name: str) -> Section:
+    def __call__(*, section: Section, section_name: str, sections: SectionMap) -> Section:
         return {{}}
 
-def {plugin_name.lower()}{i}(*, section: Section, section_name: str) -> Section:
+def {plugin_name.lower()}{i}(*, section: Section, section_name: SecName, sections: SectionMap) -> Section:
     return {{}}
 
 def some_custom_func{i}(x: int) -> int:

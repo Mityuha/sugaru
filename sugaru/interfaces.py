@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
 
-from .types import SecName, Section
+from .types import SecName, Section, SectionMap
 
 
 __all__ = [
@@ -19,7 +19,8 @@ class Plugin(Protocol):
         self,
         *,
         section: Section,
-        section_name: SecName = "",
+        section_name: str,
+        sections: SectionMap,
         **kwargs: Any,
     ) -> Section:
         ...
