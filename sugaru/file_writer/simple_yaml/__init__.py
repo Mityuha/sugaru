@@ -10,19 +10,18 @@ except ModuleNotFoundError:
     raise
 
 from pathlib import Path
-from typing import Dict
 
-from ..types import SecName, Section
+from ..types import SectionMap
 
 
-def writer(*, path: Path, content: Dict[SecName, Section]) -> None:
+def writer(*, path: Path, content: SectionMap) -> None:
     with path.open("w", encoding="utf-8") as yaml_file:
         yaml.dump(
-            content,
+            dict(content),
             yaml_file,
             width=1024,
         )
 
 
-def to_stdout(content: Dict[SecName, Section]) -> None:
-    yaml.dump(content, sys.stdout, width=1024)
+def to_stdout(content: SectionMap) -> None:
+    yaml.dump(dict(content), sys.stdout, width=1024)
