@@ -58,11 +58,11 @@ def sugarate(
     section_name: str
     for section_name, section in sections.items():
         for plugin_name, plugin in plugins.items():
-            plugin(
+            new_section: Section = plugin(
                 section_name=section_name,
                 section=section,
                 sections=sections,
             )
-            sugar_sections[section_name] = sugar_sections
+            sugar_sections[section_name] = new_section
 
     final_file_writer(path=final_file_path, content=sugar_sections)
