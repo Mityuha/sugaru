@@ -1,10 +1,11 @@
 from inspect import isclass, isfunction
-from typing import Optional, Type
-
-from ..interfaces import Plugin
+from typing import Callable, Optional, Type, TypeVar
 
 
-def create_object(plugin_class: Type[Plugin]) -> Optional[Plugin]:
+T = TypeVar("T")
+
+
+def create_object(plugin_class: Type[T]) -> Optional[Callable]:
     if isclass(plugin_class):
         try:
             return plugin_class()
