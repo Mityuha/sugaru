@@ -3,12 +3,11 @@ from typing import Any, List, TypedDict
 
 from pytest import fixture
 
-from sugaru import FinalFileWriter, PluginLoader, PluginNamesFetcher, SugarFileLoader
+from sugaru import FinalFileWriter, PluginLoader, SugarFileLoader
 
 
 class SugarateArgs(TypedDict):
     plugin_name_list: List[str]
-    plugin_names_fetcher: PluginNamesFetcher
     plugin_loader: PluginLoader
     sugar_file_path: Path
     sugar_file_loader: SugarFileLoader
@@ -20,11 +19,6 @@ class SugarateArgs(TypedDict):
 def sugarate_args(mocker: Any, faker: Any) -> SugarateArgs:
     return {
         "plugin_name_list": [faker.pystr() for _ in range(faker.pyint(max_value=10))],
-        "plugin_names_fetcher": mocker.Mock(
-            side_effect=[
-                [faker.pystr() for _ in range(faker.pyint(max_value=10))],
-            ]
-        ),
         "plugin_loader": mocker.Mock(side_effect=[[mocker.Mock()]]),
         "sugar_file_loader": mocker.Mock(
             side_effect=[{faker.pystr(): faker.pydict() for _ in range(faker.pyint(max_value=20))}]
