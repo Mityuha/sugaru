@@ -73,6 +73,7 @@ pytest-mock = "*"
 sort-all = "*"
 Faker = "*"
 docformatter = "*"
+PyYAML = "*"
 
 [tool.mypy]
 # https://mypy.readthedocs.io/en/stable/config_file.html
