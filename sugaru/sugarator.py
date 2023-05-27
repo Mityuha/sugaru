@@ -51,18 +51,30 @@ def sugarate(
 
     logger.debug(f"Plugins loaded: {list(plugins.keys())}")
 
-    sections: SectionMap = immutable_section_map(sugar_file_loader(sugar_file_path))
+    mutable_sections: Dict[SecName, Section] = sugar_file_loader(sugar_file_path)
+    immutable_sections: SectionMap = immutable_section_map(mutable_sections)
     sugar_sections: Dict[SecName, Section] = {}
 
     section: Section
     section_name: str
-    for section_name, section in sections.items():
+    for section_name, section in immutable_sections.items():
         for plugin_name, plugin in plugins.items():
             new_section: Section = plugin(
                 section_name=section_name,
                 section=section,
-                sections=sections,
+                sections=immutable_sections,
             )
             sugar_sections[section_name] = new_section
+
+            if (new_section != section) and (section_name in sugar_sections):
+                logger.warning(
+                    f"Section '{section_name}' was previously modified "
+                    f"and now that modified version is overwritten by plugin '{plugin_name}'."
+                )
+
+    _ = [
+        sugar_sections.setdefault(section_name, section)
+        for section_name, section in mutable_sections.items()
+    ]
 
     final_file_writer(path=final_file_path, content=sugar_sections)
