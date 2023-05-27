@@ -1,3 +1,5 @@
+import sys
+
 from ..logging import logger
 
 
@@ -20,3 +22,7 @@ def writer(*, path: Path, content: Dict[SecName, Section]) -> None:
             yaml_file,
             width=1024,
         )
+
+
+def to_stdout(content: Dict[SecName, Section]) -> None:
+    yaml.dump(content, sys.stdout, width=1024)
