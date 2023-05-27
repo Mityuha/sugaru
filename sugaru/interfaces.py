@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
+from typing import Any, Dict, Optional, Protocol, runtime_checkable
 
 from .types import SecName, Section, SectionMap
 
@@ -8,7 +8,6 @@ __all__ = [
     "FinalFileWriter",
     "Plugin",
     "PluginLoader",
-    "PluginNamesFetcher",
     "SugarFileLoader",
 ]
 
@@ -41,9 +40,4 @@ class PluginLoader(Protocol):
         self,
         plugin_name: str,
     ) -> Optional[Plugin]:
-        ...
-
-
-class PluginNamesFetcher(Protocol):
-    def __call__(self) -> List[str]:
         ...
