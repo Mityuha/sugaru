@@ -13,4 +13,8 @@ writer_by_extension: Final[Dict[str, FinalFileWriter]] = {
     ".json": simple_json_writer,
 }
 
-output_writer_by_extension: Final[Dict[str, FinalFileWriter]] = {}
+stdout_writer_by_extension: Final[Dict[str, FinalFileWriter]] = {
+    ".yaml": lambda path, content: yaml_to_stdout(content),
+    ".yml": lambda path, content: yaml_to_stdout(content),
+    ".json": lambda path, content: json_to_stdout(content),
+}
