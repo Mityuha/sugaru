@@ -11,6 +11,7 @@ from .interfaces import (
 )
 from .logging import logger
 from .types import JSON, SecName, Section
+from .utils import callable_name
 
 
 __all__ = ["sugarate"]
@@ -43,7 +44,7 @@ def sugarate(
             continue
 
         for plugin in plugin_list:
-            plugins[f"{plugin_name}{str(plugin)}"] = plugin  # TODO
+            plugins[f"{plugin_name}.{callable_name(plugin)}"] = plugin
 
     if not plugins:
         logger.warning("No one plugin was loaded, returning...")
@@ -61,27 +62,34 @@ def sugarate(
 
     section: Section
     section_name: str
+
     for section_name, section in sections.items():
         for plugin_name, plugin in plugins.items():
+            # TODO:
+            # 1. deepcopy(section)
+            # 2. check that sections are not changed
+            # 3. Merge section content
+            # 4. Optional: link section changes to plugin names
+            # (simple debugging)
+
             new_section: Section = plugin(
                 section_name=section_name,
                 section=section,
                 sections=sections,
             )
 
-            sugar_sections[section_name] = new_section
-
             if (new_section != section) and (section_name in sugar_sections):
                 logger.warning(
                     f"Section '{section_name}' was previously modified "
-                    f"and now that modified version is overwritten by plugin '{plugin_name}'."
+                    f"and now that modified version is overwritten by plugin '{plugin_name}' [TODO merge]."
                 )
+            sugar_sections[section_name] = new_section
 
     _ = [
         sugar_sections.setdefault(section_name, section)
         for section_name, section in sections.items()
     ]
 
-    output_content: JSON = section_decoder(sections, origin=content)
+    output_content: JSON = section_decoder(sugar_sections, origin=content)
 
     final_file_writer(path=final_file_path, content=output_content)
