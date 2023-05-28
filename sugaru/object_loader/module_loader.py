@@ -13,7 +13,7 @@ def load_module(plugin_name: str) -> Optional[ModuleType]:
             return import_module(module_name)
         except ModuleNotFoundError:
             logger.trace(f"Module '{module_name}' import failed.")
-            if plugin_name != module_name:
+            if plugin_name != module_name or "." not in module_name:
                 break
 
             module_name, plugin = module_name.rsplit(".", maxsplit=1)

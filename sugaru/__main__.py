@@ -86,6 +86,8 @@ def main(
         sugar_file_loader = loader_by_extension[ext]
 
     sugar_file_writer: FinalFileWriter
+
+    output_path: Path = file_path
     if file_writer != AUTO:
         sugar_file_writer = load_object_with_error(
             object_loader,
@@ -94,15 +96,16 @@ def main(
             type_check=type_check,
         )
     else:
-        output_path: Path = Path(output)
-        out_ext: str = output_path.suffix
-
-        if out_ext not in writer_by_extension:
-            logger.warning(f"Cannot find plugin writer by extension '{out_ext}'")
-            return
-        sugar_file_writer = writer_by_extension[out_ext]
         if output == STDOUT:
-            sugar_file_writer = stdout_writer_by_extension[out_ext]
+            sugar_file_writer = stdout_writer_by_extension[file_path.suffix]
+        else:
+            output_path = Path(output)
+            out_ext: str = output_path.suffix
+
+            if out_ext not in writer_by_extension:
+                logger.warning(f"cannot find plugin writer by extension '{out_ext}'")
+                return
+            sugar_file_writer = writer_by_extension[out_ext]
 
     section_encoder: SectionEncoder = encode_section
     section_decoder: SectionDecoder = decode_section
