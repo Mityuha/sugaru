@@ -1,7 +1,7 @@
 from pathlib import Path
-from typing import Any, List, Protocol, runtime_checkable
+from typing import Any, Dict, List, Protocol, runtime_checkable
 
-from .types import JSON, Section, SectionMap
+from .types import JSON, SecName, Section
 
 
 __all__ = [
@@ -19,7 +19,7 @@ class Plugin(Protocol):
         *,
         section: Section,
         section_name: str,
-        sections: SectionMap,
+        sections: Dict[SecName, Section],
         **kwargs: Any,
     ) -> Section:
         ...
@@ -40,4 +40,14 @@ class PluginLoader(Protocol):
         self,
         plugin_name: str,
     ) -> List[Plugin]:
+        ...
+
+
+class SectionEncoder(Protocol):
+    def __call__(self, content: JSON) -> Dict[SecName, Section]:
+        ...
+
+
+class SectionDecoder(Protocol):
+    def __call__(self, section_map: Dict[SecName, Section], *, origin: JSON) -> JSON:
         ...
