@@ -5,10 +5,17 @@ import typer
 
 from .file_loader import loader_by_extension
 from .file_writer import writer_by_extension
-from .interfaces import FinalFileWriter, PluginLoader, SugarFileLoader
+from .interfaces import (
+    FinalFileWriter,
+    PluginLoader,
+    SectionDecoder,
+    SectionEncoder,
+    SugarFileLoader,
+)
 from .logging import logger
 from .plugin_loader import SimplePluginLoader
 from .sugarator import sugarate
+from .utils import decode_section, encode_section
 
 
 STDOUT: Final[str] = "stdout"
@@ -52,6 +59,9 @@ def main(
             return
         sugar_file_writer: FinalFileWriter = writer_by_extension[out_ext]
 
+    section_encoder: SectionEncoder = encode_section
+    section_decoder: SectionDecoder = decode_section
+
     sugarate(
         plugin_name_list=plugin,
         plugin_loader=plugin_loader,
@@ -59,6 +69,8 @@ def main(
         sugar_file_loader=sugar_file_loader,
         final_file_path=output_path,
         final_file_writer=sugar_file_writer,
+        section_encoder=section_encoder,
+        section_decoder=section_decoder,
     )
 
 

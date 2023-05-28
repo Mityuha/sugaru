@@ -11,6 +11,9 @@ def check_callable_signature(
     *,
     type_check: bool = False,
 ) -> bool:
+    if is_builtin(obj):
+        return False
+
     standard: Signature = signature(class_.__call__)
 
     standard_params: Dict[str, Any] = {
@@ -18,9 +21,6 @@ def check_callable_signature(
         for p in standard.parameters.values()
         if p.name not in ("self", "args", "kwargs")
     }
-
-    if is_builtin(obj):
-        return False
 
     sign: Signature
 

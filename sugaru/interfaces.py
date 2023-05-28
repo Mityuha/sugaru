@@ -8,6 +8,8 @@ __all__ = [
     "FinalFileWriter",
     "Plugin",
     "PluginLoader",
+    "SectionDecoder",
+    "SectionEncoder",
     "SugarFileLoader",
 ]
 

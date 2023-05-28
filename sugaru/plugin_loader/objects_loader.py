@@ -4,7 +4,7 @@ from typing import List, Type
 
 from ..interfaces import Plugin
 from ..logging import logger
-from .utils import is_builtin
+from ..utils import is_builtin
 
 
 def load_objects(

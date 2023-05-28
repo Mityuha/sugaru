@@ -3,7 +3,15 @@ from typing import Any, List, TypedDict
 
 from pytest import fixture
 
-from sugaru import FinalFileWriter, PluginLoader, SugarFileLoader
+from sugaru import (
+    FinalFileWriter,
+    PluginLoader,
+    SectionDecoder,
+    SectionEncoder,
+    SugarFileLoader,
+    decode_section,
+    encode_section,
+)
 
 
 class SugarateArgs(TypedDict):
@@ -13,6 +21,8 @@ class SugarateArgs(TypedDict):
     sugar_file_loader: SugarFileLoader
     final_file_path: Path
     final_file_writer: FinalFileWriter
+    section_encoder: SectionEncoder
+    section_decoder: SectionDecoder
 
 
 @fixture
@@ -26,4 +36,6 @@ def sugarate_args(mocker: Any, faker: Any) -> SugarateArgs:
         "final_file_writer": mocker.Mock(),
         "sugar_file_path": Path(faker.pystr()),
         "final_file_path": Path(faker.pystr()),
+        "section_encoder": encode_section,
+        "section_decoder": decode_section,
     }

@@ -1,6 +1,7 @@
 import sys
 import tempfile
 from dataclasses import dataclass
+from pathlib import Path
 from random import choice
 from typing import Iterator, List
 
@@ -24,15 +25,24 @@ class PluginContent:
 def plugin_content() -> PluginContent:
     plugin_num: int = 5
     plugin_name: str = "MultiPluginTest"
+
+    dict_import: str = ""
+    dict_type: str = "dict"
+
+    if sys.version_info < (3, 9):
+        dict_import = "from typing import Dict"
+        dict_type = "Dict"
+
     plugin_content: str = "\n\n".join(
         f"""
-from sugaru import Section, SecName, SectionMap
+{dict_import}
+from sugaru import Section, SecName
 class {plugin_name}{i}:
     @staticmethod
-    def __call__(*, section: Section, section_name: str, sections: SectionMap) -> Section:
+    def __call__(*, section: Section, section_name: str, sections: {dict_type}[str, Section]) -> Section:
         return {{}}
 
-def {plugin_name.lower()}{i}(*, section: Section, section_name: SecName, sections: SectionMap) -> Section:
+def {plugin_name.lower()}{i}(*, section: Section, section_name: SecName, sections: {dict_type}[str, Section]) -> Section:
     return {{}}
 
 def some_custom_func{i}(x: int) -> int:
@@ -64,5 +74,5 @@ def plugin_path(plugin_content: PluginContent) -> Iterator[PluginPath]:
                 f.write(plugin_content.content)
 
             dir_name: str = package_path.split("/")[-1]
-            file_name: str = py_path.name.split("/")[-1].split(".")[0]
+            file_name: str = Path(py_path.name).stem
             yield PluginPath(file_path=py_path.name, py_path=f"{dir_name}.{file_name}")
