@@ -1,6 +1,6 @@
 from pathlib import Path
 from types import MappingProxyType
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from .interfaces import FinalFileWriter, Plugin, PluginLoader, SugarFileLoader
 from .logging import logger
@@ -24,6 +24,13 @@ def immutable_section_map(mutable_sections: Dict[SecName, Section]) -> SectionMa
     return sections
 
 
+def section_to_mutable_section(section: Any) -> Section:
+    if isinstance(section, MappingProxyType):
+        return dict(section)
+
+    return section
+
+
 def sugarate(
     *,
     plugin_name_list: List[str],
@@ -33,17 +40,19 @@ def sugarate(
     final_file_path: Path,
     final_file_writer: FinalFileWriter,
 ) -> None:
-    logger.debug(f"Plugin list specified or fetched: {plugin_name_list}")
+    logger.debug(f"Plugin list: {plugin_name_list}")
 
     plugin_name: str
     plugins: Dict[str, Plugin] = {}
     for plugin_name in plugin_name_list:
-        plugin: Optional[Plugin] = plugin_loader(plugin_name)
-        if not plugin:
+        plugin_list: List[Plugin] = plugin_loader(plugin_name)
+        print(">>>", plugin_list)
+        if not plugin_list:
             logger.warning(f"Unable to load plugin '{plugin_name}', skip")
             continue
 
-        plugins[plugin_name] = plugin
+        for plugin in plugin_list:
+            plugins[f"{plugin_name}{str(plugin)}"] = plugin  # TODO
 
     if not plugins:
         logger.warning("No one plugin was loaded, returning...")
@@ -51,9 +60,12 @@ def sugarate(
 
     logger.debug(f"Plugins loaded: {list(plugins.keys())}")
 
-    mutable_sections: Dict[SecName, Section] = sugar_file_loader(sugar_file_path)
+    logger.trace(f"Loading file '{sugar_file_path.name}'")
+    mutable_sections: Dict[SecName, Section] = sugar_file_loader(sugar_file_path)  # type: ignore # TODO
     immutable_sections: SectionMap = immutable_section_map(mutable_sections)
     sugar_sections: Dict[SecName, Section] = {}
+
+    logger.trace(f"File '{sugar_file_path.name}' successfully loaded")
 
     section: Section
     section_name: str
@@ -64,7 +76,8 @@ def sugarate(
                 section=section,
                 sections=immutable_sections,
             )
-            sugar_sections[section_name] = new_section
+
+            sugar_sections[section_name] = section_to_mutable_section(new_section)
 
             if (new_section != section) and (section_name in sugar_sections):
                 logger.warning(

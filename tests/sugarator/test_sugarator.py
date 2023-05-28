@@ -30,7 +30,9 @@ def test_sugarate_run_plugins_against_sections(
 ) -> None:
     plugins: List[str] = sugarate_args["plugin_name_list"]
     sugarate_args["plugin_loader"].configure_mock(  # type: ignore
-        side_effect=[lambda section, section_name, **_kwargs: section for _ in range(len(plugins))]
+        side_effect=[
+            [lambda section, section_name, **_kwargs: section] for _ in range(len(plugins))
+        ]
     )
 
     sugarate(**sugarate_args)

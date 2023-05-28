@@ -7,9 +7,9 @@ except ModuleNotFoundError:
     logger.error("Cannot import module named 'yaml'. Try install 'pyyaml' first and try again")
     raise
 from pathlib import Path
-from typing import Dict, Final
+from typing import Final
 
-from ..types import SecName, Section
+from ..types import JSON
 
 
 class Ref(yaml.YAMLObject):
@@ -31,6 +31,6 @@ class Ref(yaml.YAMLObject):
         )
 
 
-def loader(path: Path) -> Dict[SecName, Section]:
+def loader(path: Path) -> JSON:
     with path.open(encoding="utf-8") as load_file:
         return yaml.safe_load(load_file)

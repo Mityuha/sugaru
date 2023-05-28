@@ -53,5 +53,5 @@ some-job-1:
         with path.open("w") as f:
             f.write(yaml_content)
 
-        sections: dict = simple_yaml_loader(path)
+        sections: Any = simple_yaml_loader(path)
         assert sections == dict_content

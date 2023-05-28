@@ -1,1 +1,1 @@
-from ..types import SecName, Section  # noqa: F401
+from ..types import JSON, SecName, Section  # noqa: F401

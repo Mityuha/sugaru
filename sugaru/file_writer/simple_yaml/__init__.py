@@ -11,17 +11,17 @@ except ModuleNotFoundError:
 
 from pathlib import Path
 
-from ..types import SectionMap
+from ..types import JSON
 
 
-def writer(*, path: Path, content: SectionMap) -> None:
+def writer(*, path: Path, content: JSON) -> None:
     with path.open("w", encoding="utf-8") as yaml_file:
         yaml.dump(
-            dict(content),
+            content,
             yaml_file,
             width=1024,
         )
 
 
-def to_stdout(content: SectionMap) -> None:
-    yaml.dump(dict(content), sys.stdout, width=1024)
+def to_stdout(content: JSON) -> None:
+    yaml.dump(content, sys.stdout, width=1024)
