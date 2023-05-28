@@ -1,19 +1,8 @@
-import builtins
 from inspect import Signature, isclass, isfunction, signature
-from types import FunctionType
-from typing import Any, Dict, List, Type
+from typing import Any, Dict, Type
 
-from .logging import logger
-
-
-__all__ = ["check_callable_signature", "is_builtin"]
-
-
-BUILTIN_TYPES: List[str] = dir(builtins)
-
-
-def is_builtin(_type: Type | FunctionType) -> bool:
-    return _type.__name__ in BUILTIN_TYPES
+from ..logging import logger
+from .names_and_types import is_builtin
 
 
 def check_callable_signature(
