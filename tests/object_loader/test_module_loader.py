@@ -1,7 +1,7 @@
 from types import ModuleType
 from typing import Optional
 
-from sugaru.plugin_loader import load_module
+from sugaru import load_module
 
 
 def test_load_plugin_name_as_module() -> None:

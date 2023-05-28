@@ -1,4 +1,4 @@
-from sugaru.plugin_loader import create_object
+from sugaru import create_object
 
 
 def test_create_objects() -> None:

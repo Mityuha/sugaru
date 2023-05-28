@@ -5,7 +5,7 @@ from pytest import fixture
 
 from sugaru import (
     FinalFileWriter,
-    PluginLoader,
+    ObjectLoader,
     SectionDecoder,
     SectionEncoder,
     SugarFileLoader,
@@ -16,7 +16,7 @@ from sugaru import (
 
 class SugarateArgs(TypedDict):
     plugin_name_list: List[str]
-    plugin_loader: PluginLoader
+    object_loader: ObjectLoader
     sugar_file_path: Path
     sugar_file_loader: SugarFileLoader
     final_file_path: Path
@@ -29,7 +29,7 @@ class SugarateArgs(TypedDict):
 def sugarate_args(mocker: Any, faker: Any) -> SugarateArgs:
     return {
         "plugin_name_list": [faker.pystr() for _ in range(faker.pyint(max_value=10))],
-        "plugin_loader": mocker.Mock(side_effect=[[mocker.Mock()]]),
+        "object_loader": mocker.Mock(side_effect=[[mocker.Mock()]]),
         "sugar_file_loader": mocker.Mock(
             side_effect=[{faker.pystr(): faker.pydict() for _ in range(faker.pyint(max_value=20))}]
         ),
