@@ -75,6 +75,7 @@ sort-all = "*"
 Faker = "*"
 docformatter = "*"
 PyYAML = "*"
+loguru = "*"
 
 [tool.mypy]
 # https://mypy.readthedocs.io/en/stable/config_file.html
