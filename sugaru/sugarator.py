@@ -3,8 +3,8 @@ from typing import Dict, List
 
 from .interfaces import (
     FinalFileWriter,
+    ObjectLoader,
     Plugin,
-    PluginLoader,
     SectionDecoder,
     SectionEncoder,
     SugarFileLoader,
@@ -19,20 +19,25 @@ __all__ = ["sugarate"]
 def sugarate(
     *,
     plugin_name_list: List[str],
-    plugin_loader: PluginLoader,
+    object_loader: ObjectLoader,
     sugar_file_path: Path,
     sugar_file_loader: SugarFileLoader,
     final_file_path: Path,
     final_file_writer: FinalFileWriter,
     section_encoder: SectionEncoder,
     section_decoder: SectionDecoder,
+    type_check: bool = True,
 ) -> None:
     logger.debug(f"Plugin list: {plugin_name_list}")
 
     plugin_name: str
     plugins: Dict[str, Plugin] = {}
     for plugin_name in plugin_name_list:
-        plugin_list: List[Plugin] = plugin_loader(plugin_name)
+        plugin_list: List[Plugin] = object_loader(
+            plugin_name,
+            class_=Plugin,
+            type_check=type_check,
+        )
         if not plugin_list:
             logger.warning(f"Unable to load plugin '{plugin_name}', skip")
             continue

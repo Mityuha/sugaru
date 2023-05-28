@@ -7,13 +7,14 @@ from .file_loader import loader_by_extension
 from .file_writer import writer_by_extension
 from .interfaces import (
     FinalFileWriter,
-    PluginLoader,
+    ObjectLoader,
+    Plugin,
     SectionDecoder,
     SectionEncoder,
     SugarFileLoader,
 )
 from .logging import logger
-from .plugin_loader import SimplePluginLoader
+from .object_loader import SimpleObjectLoader
 from .sugarator import sugarate
 from .utils import decode_section, encode_section
 
@@ -40,7 +41,7 @@ def main(
         logger.warning(f"File '{file}' does not exist or is not file")
         return
 
-    plugin_loader: PluginLoader = SimplePluginLoader()
+    object_loader: ObjectLoader[Plugin] = SimpleObjectLoader()
 
     ext: str = file_path.suffix
 
@@ -64,13 +65,14 @@ def main(
 
     sugarate(
         plugin_name_list=plugin,
-        plugin_loader=plugin_loader,
+        object_loader=object_loader,
         sugar_file_path=file_path,
         sugar_file_loader=sugar_file_loader,
         final_file_path=output_path,
         final_file_writer=sugar_file_writer,
         section_encoder=section_encoder,
         section_decoder=section_decoder,
+        type_check=type_check,
     )
 
 

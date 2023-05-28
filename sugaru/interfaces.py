@@ -1,20 +1,21 @@
 from pathlib import Path
-from typing import Any, Dict, List, Protocol, runtime_checkable
+from typing import Any, Dict, List, Protocol, Type, TypeVar
 
 from .types import JSON, SecName, Section
 
 
+T = TypeVar("T")
+
 __all__ = [
     "FinalFileWriter",
+    "ObjectLoader",
     "Plugin",
-    "PluginLoader",
     "SectionDecoder",
     "SectionEncoder",
     "SugarFileLoader",
 ]
 
 
-@runtime_checkable
 class Plugin(Protocol):
     def __call__(
         self,
@@ -37,11 +38,14 @@ class FinalFileWriter(Protocol):
         ...
 
 
-class PluginLoader(Protocol):
+class ObjectLoader(Protocol[T]):
     def __call__(
         self,
-        plugin_name: str,
-    ) -> List[Plugin]:
+        obj_name: str,
+        class_: Type[T],
+        *,
+        type_check: bool = True,
+    ) -> List[T]:
         ...
 
 
