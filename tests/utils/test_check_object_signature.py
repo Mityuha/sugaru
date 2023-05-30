@@ -1,6 +1,13 @@
-from typing import Any, Dict, List, Protocol, Tuple
+import sys
+from typing import Any, Dict, List, Tuple
 
 from sugaru import check_callable_signature
+
+
+if sys.version_info < (3, 8):
+    from typing_extensions import Protocol
+else:
+    from typing import Protocol
 
 
 class LoaderStub(Protocol):

@@ -1,5 +1,12 @@
+import sys
 from pathlib import Path
-from typing import Any, List, TypedDict
+from typing import Any, List
+
+
+if sys.version_info < (3, 8):
+    from typing_extensions import TypedDict
+else:
+    from typing import TypedDict
 
 from pytest import fixture
 
