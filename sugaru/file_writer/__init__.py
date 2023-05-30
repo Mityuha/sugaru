@@ -1,6 +1,7 @@
-from typing import Dict, Final
+from typing import Dict
 
 from ..interfaces import FinalFileWriter
+from ..utils import Final
 from .simple_json import to_stdout as json_to_stdout
 from .simple_json import writer as simple_json_writer
 from .simple_yaml import to_stdout as yaml_to_stdout

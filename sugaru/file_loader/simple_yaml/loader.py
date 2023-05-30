@@ -7,8 +7,8 @@ except ModuleNotFoundError:
     logger.error("Cannot import module named 'yaml'. Try install 'pyyaml' first and try again")
     raise
 from pathlib import Path
-from typing import Final
 
+from sugaru.utils import Final
 from ..types import JSON
 
 

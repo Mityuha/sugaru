@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Final, List
+from typing import List
 
 import typer
 
@@ -17,7 +17,7 @@ from .logging import logger
 from .object_loader import SimpleObjectLoader
 from .plugin_executor import simple_plugin_executor
 from .sugarator import sugarate
-from .utils import decode_section, encode_section, load_object_or_raise_error
+from .utils import Final, decode_section, encode_section, load_object_or_raise_error
 
 
 STDOUT: Final[str] = "stdout"
