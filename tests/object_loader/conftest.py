@@ -66,6 +66,7 @@ def some_custom_func{i}(x: int) -> int:
 def plugin_path(plugin_content: PluginContent) -> Iterator[PluginPath]:
     paths: list[str] = [p for p in sys.path if p.endswith("site-packages")]
     base_path: str = choice(paths)
+    print(sys.path, paths, base_path)
     with tempfile.TemporaryDirectory(dir=base_path) as package_path:
         with open(f"{package_path}/__init__.py", "w"):
             ...
