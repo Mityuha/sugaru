@@ -3,7 +3,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from sugaru.file_loader import simple_json_loader
+from sugaru import JSON, simple_json_loader
 
 
 def test_simple_json_loader(faker: Any) -> None:
@@ -15,5 +15,5 @@ def test_simple_json_loader(faker: Any) -> None:
         with path.open("w") as f:
             f.write(json_content)
 
-        sections: dict = simple_json_loader(path)
+        sections: JSON = simple_json_loader(path)
         assert sections == dict_content
