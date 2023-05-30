@@ -1,4 +1,5 @@
 from importlib import import_module
+from traceback import print_exc
 from types import ModuleType
 from typing import Optional
 
@@ -12,6 +13,7 @@ def load_module(plugin_name: str) -> Optional[ModuleType]:
         try:
             return import_module(module_name)
         except ModuleNotFoundError:
+            print_exc()
             logger.trace(f"Module '{module_name}' import failed.")
             if plugin_name != module_name or "." not in module_name:
                 break
