@@ -1,6 +1,6 @@
 from typing import Callable, List, Type
 
-from .interfaces import ObjectLoader
+from ..interfaces import ObjectLoader
 
 
 def load_object_or_raise_error(
