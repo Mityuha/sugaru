@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Callable, Final, List, Type
+from typing import Final, List
 
 import typer
 
@@ -17,31 +17,13 @@ from .logging import logger
 from .object_loader import SimpleObjectLoader
 from .plugin_executor import simple_plugin_executor
 from .sugarator import sugarate
-from .utils import decode_section, encode_section
+from .utils import decode_section, encode_section, load_object_or_raise_error
 
 
 STDOUT: Final[str] = "stdout"
 AUTO: Final[str] = "auto"
 
 app = typer.Typer()
-
-
-def load_object_with_error(
-    object_loader: ObjectLoader[Callable],
-    *,
-    obj_name: str,
-    class_: Type[Callable],
-    type_check: bool,
-) -> Callable:
-    objects: List[Callable] = object_loader(
-        obj_name=obj_name,
-        class_=class_,
-        type_check=type_check,
-    )
-    if not objects:
-        raise ImportError(f"Cannot load object '{obj_name}' by signature '{class_}'")
-
-    return objects[0]
 
 
 @app.command()
@@ -65,7 +47,7 @@ def main(
 
     object_loader: ObjectLoader = SimpleObjectLoader()
     if obj_loader != AUTO:
-        object_loader = load_object_with_error(
+        object_loader = load_object_or_raise_error(
             object_loader,
             obj_name=obj_loader,
             class_=ObjectLoader,
@@ -74,7 +56,7 @@ def main(
 
     sugar_file_loader: SugarFileLoader
     if file_loader != AUTO:
-        sugar_file_loader = load_object_with_error(
+        sugar_file_loader = load_object_or_raise_error(
             object_loader,
             obj_name=file_loader,
             class_=SugarFileLoader,
@@ -92,7 +74,7 @@ def main(
 
     output_path: Path = file_path
     if file_writer != AUTO:
-        sugar_file_writer = load_object_with_error(
+        sugar_file_writer = load_object_or_raise_error(
             object_loader,
             obj_name=file_writer,
             class_=FinalFileWriter,
@@ -114,7 +96,7 @@ def main(
     section_decoder: SectionDecoder = decode_section
 
     if sec_encoder != AUTO:
-        section_encoder = load_object_with_error(
+        section_encoder = load_object_or_raise_error(
             object_loader,
             obj_name=sec_encoder,
             class_=SectionEncoder,
@@ -122,7 +104,7 @@ def main(
         )
 
     if sec_decoder != AUTO:
-        section_decoder = load_object_with_error(
+        section_decoder = load_object_or_raise_error(
             object_loader,
             obj_name=sec_decoder,
             class_=SectionDecoder,
@@ -131,7 +113,7 @@ def main(
 
     plugin_executor: PluginExecutor = simple_plugin_executor
     if plug_executor != AUTO:
-        plugin_executor = load_object_with_error(
+        plugin_executor = load_object_or_raise_error(
             object_loader,
             obj_name=plug_executor,
             class_=PluginExecutor,
