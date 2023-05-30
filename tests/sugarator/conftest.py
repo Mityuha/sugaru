@@ -6,11 +6,13 @@ from pytest import fixture
 from sugaru import (
     FinalFileWriter,
     ObjectLoader,
+    PluginExecutor,
     SectionDecoder,
     SectionEncoder,
     SugarFileLoader,
     decode_section,
     encode_section,
+    simple_plugin_executor,
 )
 
 
@@ -23,6 +25,7 @@ class SugarateArgs(TypedDict):
     final_file_writer: FinalFileWriter
     section_encoder: SectionEncoder
     section_decoder: SectionDecoder
+    plugin_executor: PluginExecutor
 
 
 @fixture
@@ -38,4 +41,5 @@ def sugarate_args(mocker: Any, faker: Any) -> SugarateArgs:
         "final_file_path": Path(faker.pystr()),
         "section_encoder": encode_section,
         "section_decoder": decode_section,
+        "plugin_executor": simple_plugin_executor,
     }

@@ -8,12 +8,14 @@ from .file_writer import stdout_writer_by_extension, writer_by_extension
 from .interfaces import (
     FinalFileWriter,
     ObjectLoader,
+    PluginExecutor,
     SectionDecoder,
     SectionEncoder,
     SugarFileLoader,
 )
 from .logging import logger
 from .object_loader import SimpleObjectLoader
+from .plugin_executor import simple_plugin_executor
 from .sugarator import sugarate
 from .utils import decode_section, encode_section
 
@@ -53,6 +55,7 @@ def main(
     file_writer: str = AUTO,
     sec_encoder: str = AUTO,
     sec_decoder: str = AUTO,
+    plug_executor: str = AUTO,
     type_check: bool = True,
 ) -> None:
     file_path: Path = Path(file)
@@ -126,6 +129,15 @@ def main(
             type_check=type_check,
         )
 
+    plugin_executor: PluginExecutor = simple_plugin_executor
+    if plug_executor != AUTO:
+        plugin_executor = load_object_with_error(
+            object_loader,
+            obj_name=plug_executor,
+            class_=PluginExecutor,
+            type_check=type_check,
+        )
+
     sugarate(
         plugin_name_list=plugin,
         object_loader=object_loader,
@@ -135,6 +147,7 @@ def main(
         final_file_writer=sugar_file_writer,
         section_encoder=section_encoder,
         section_decoder=section_decoder,
+        plugin_executor=plugin_executor,
         type_check=type_check,
     )
 

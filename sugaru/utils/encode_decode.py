@@ -14,12 +14,12 @@ def encode_section(content: JSON) -> Dict[SecName, Section]:
     return content
 
 
-def decode_section(section_map: Dict[SecName, Section], *, origin: JSON) -> JSON:
+def decode_section(sections: Dict[SecName, Section], *, origin: JSON) -> JSON:
     if isinstance(origin, list):
-        return [item for item in section_map.values()]
+        return [item for item in sections.values()]
 
     if isinstance(origin, (str, int, float, type(None), bool)):
-        return section_map[""]
+        return sections[""]
 
     assert isinstance(origin, dict)
-    return section_map
+    return sections

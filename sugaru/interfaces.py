@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, Iterable, List, Mapping, Protocol, Type, TypeVar
+from typing import Dict, List, Mapping, Protocol, Type, TypeVar
 
 from .types import JSON, SecName, Section
 
@@ -10,6 +10,7 @@ __all__ = [
     "FinalFileWriter",
     "ObjectLoader",
     "Plugin",
+    "PluginExecutor",
     "SectionDecoder",
     "SectionEncoder",
     "SugarFileLoader",
@@ -63,6 +64,6 @@ class PluginExecutor(Protocol):
         self,
         *,
         sections: Mapping[str, Section],
-        plugins: Iterable[Plugin],
+        plugins: Mapping[str, Plugin],
     ) -> Dict[str, Section]:
         ...
