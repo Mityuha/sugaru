@@ -76,6 +76,10 @@ Faker = "*"
 docformatter = "*"
 PyYAML = "*"
 loguru = "*"
+tox = "^4.5.2"
+
+[tool.poetry.extras]
+yaml = ["pyyaml"]
 
 [tool.mypy]
 # https://mypy.readthedocs.io/en/stable/config_file.html
@@ -104,21 +108,21 @@ envlist = py37,py38,py39,py310,py311
 
 [testenv]
 deps =
-    black==22.8.0
-    isort==5.10.1
-    pylint==2.13.9
+    black==23.3.0
+    isort==5.11.5
+    ruff==0.0.263
 
-    pytest==7.0.1
-    pytest-mock==3.6.1
-    typing_extensions==4.1.1
-    pytest-trio==0.7.0
-    types-dataclasses==0.6.6
+    typer==0.9.0
+    pyyaml==6.0
 
-    mypy==0.971
+    pytest==7.3.1
+    pytest-mock==3.7.0
+    mypy > 1.0.0
+    faker==18.6.0
 commands = 
     black --check sugaru/ tests/
     isort --check sugaru tests/
-    pylint sugaru/ tests/  --disable=no-self-use,R0801,cyclic-import,isinstance-second-argument-not-valid-type
+    ruff sugaru/ tests/
     mypy sugaru/ tests/ 
     pytest tests/ -x
 setenv =
