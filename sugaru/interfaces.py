@@ -1,5 +1,12 @@
+import sys
 from pathlib import Path
-from typing import Dict, List, Mapping, Protocol, Type, TypeVar
+from typing import Dict, List, Mapping, Type, TypeVar
+
+
+if sys.version_info < (3, 8):
+    from typing_extensions import Protocol
+else:
+    from typing import Protocol
 
 from .types import JSON, SecName, Section
 
