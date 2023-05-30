@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List, Protocol, Type, TypeVar
+from typing import Dict, Iterable, List, Mapping, Protocol, Type, TypeVar
 
 from .types import JSON, SecName, Section
 
@@ -22,8 +22,7 @@ class Plugin(Protocol):
         *,
         section: Section,
         section_name: str,
-        sections: Dict[SecName, Section],
-        **kwargs: Any,
+        sections: Mapping[SecName, Section],
     ) -> Section:
         ...
 
@@ -55,5 +54,15 @@ class SectionEncoder(Protocol):
 
 
 class SectionDecoder(Protocol):
-    def __call__(self, section_map: Dict[SecName, Section], *, origin: JSON) -> JSON:
+    def __call__(self, sections: Dict[SecName, Section], *, origin: JSON) -> JSON:
+        ...
+
+
+class PluginExecutor(Protocol):
+    def __call__(
+        self,
+        *,
+        sections: Mapping[str, Section],
+        plugins: Iterable[Plugin],
+    ) -> Dict[str, Section]:
         ...
