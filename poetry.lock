@@ -627,7 +627,7 @@ yaml = []
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7"
-content-hash = "c55730d2e8b4643108778b83555ebd523d9cc6237046be2f8a6a5074a8e068c1"
+content-hash = "ba4add212e75bdf9b0451a69954107a0507f4f19d9f31055ae2e228b1d0298c3"
 
 [metadata.files]
 autoflake = [
