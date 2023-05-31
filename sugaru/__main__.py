@@ -38,7 +38,7 @@ def main(
     sec_encoder: str = AUTO,
     sec_decoder: str = AUTO,
     plug_executor: str = AUTO,
-    type_check: bool = True,
+    type_check: bool = False,
 ) -> None:
     file_path: Path = Path(file)
     if not file_path.is_file():

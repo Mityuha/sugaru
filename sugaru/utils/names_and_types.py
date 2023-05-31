@@ -1,9 +1,12 @@
 import builtins
+import typing
 from types import FunctionType
-from typing import Any, List, Type, Union
+from typing import Any, Set, Type, Union
+
+import typing_extensions
 
 
-BUILTIN_TYPES: List[str] = dir(builtins)
+BUILTIN_TYPES: Set[str] = set(dir(builtins) + dir(typing) + dir(typing_extensions))
 
 
 def is_builtin(_type: Union[Type, FunctionType]) -> bool:

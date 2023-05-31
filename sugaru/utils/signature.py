@@ -2,6 +2,7 @@ from inspect import Signature, isclass, isfunction, signature
 from typing import Any, Dict, Type
 
 from ..logging import logger
+from ..utils import callable_name
 from .names_and_types import is_builtin
 
 
@@ -25,13 +26,15 @@ def check_callable_signature(
     sign: Signature
 
     if isclass(obj) and hasattr(obj, "__call__"):
-        logger.trace(f"Object '{obj.__name__}' is a class and callable")
+        logger.trace(f"Object '{callable_name(obj)}' is a class and callable")
         sign = signature(obj.__call__)
     elif isfunction(obj):
-        logger.trace(f"Object '{obj.__name__}' is a function")
+        logger.trace(f"Object '{callable_name(obj)}' is a function")
         sign = signature(obj)
     else:
-        logger.trace(f"Object '{obj.__name__}' is neither class with __call__ nor function. skip")
+        logger.trace(
+            f"Object '{callable_name(obj)}' is neither class with __call__ nor function. skip"
+        )
         return False
 
     obj_params: Dict[str, Any] = {
@@ -39,7 +42,7 @@ def check_callable_signature(
     }
 
     if obj_params.keys() != standard_params.keys():
-        logger.info(f"Object '{object.__name__}' has got bad param names")
+        logger.trace(f"Object '{callable_name(obj)}' has got bad param names")
         return False
 
     if type_check:

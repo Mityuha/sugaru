@@ -41,7 +41,7 @@ class SimpleObjectLoader(Generic[T]):
             )
         ]
 
-        logger.debug(
+        logger.trace(
             f"{_self}: classes after signature check: {[p.__name__ for p in object_classes]}"
         )
 
@@ -55,7 +55,7 @@ class SimpleObjectLoader(Generic[T]):
                 continue
             objects.append(obj)
 
-        logger.debug(
+        logger.trace(
             f"{_self}: objects after classes instantiating: {[callable_name(p) for p in objects]}"
         )
 
