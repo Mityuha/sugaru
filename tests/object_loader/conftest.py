@@ -1,6 +1,7 @@
 import sys
 import tempfile
 from dataclasses import dataclass
+from importlib import invalidate_caches
 from pathlib import Path
 from random import choice
 from typing import Iterator, List
@@ -74,6 +75,7 @@ def plugin_path(plugin_content: PluginContent) -> Iterator[PluginPath]:
             with open(py_path.name, "w") as f:
                 f.write(plugin_content.content)
 
+            invalidate_caches()
             dir_name: str = package_path.split("/")[-1]
             file_name: str = Path(py_path.name).stem
             yield PluginPath(file_path=py_path.name, py_path=f"{dir_name}.{file_name}")
