@@ -56,10 +56,7 @@ def callable_params(obj: Callable) -> Dict[str, Any]:
 
 
 def signature_type_check(*, check: Signature, origin: Signature) -> bool:
-    logger.info(
-        "'type_check' option is not implemented yet"
-        "The thing is considering 'dict', 'typing.Dict', 'Mapping' (and so forth) types as the same types"
-    )
+    logger.info("'type_check' option is not implemented yet")
     return True
 
 
