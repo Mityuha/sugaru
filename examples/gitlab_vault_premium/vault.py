@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Mapping, cast
+from typing import Any, Dict, List
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -12,14 +12,19 @@ class VaultSection(TypedDict):
     script: List[Any]
 
 
-def vault_plugin(
-    section_name: str, section: VaultSection, sections: Mapping[str, Section]
-) -> Section:
-    if not isinstance(section, dict):
+def vault_plugin(section: VaultSection) -> Section:
+    '''https://docs.gitlab.com/ee/ci/secrets/#use-vault-secrets-in-a-ci-job
+      job_using_vault:
+    id_tokens:
+      VAULT_ID_TOKEN:
+        aud: https://gitlab.com
+    secrets:
+      DATABASE_PASSWORD:
+        vault: production/db/password@ops  # translates to secret `ops/data/production/db`, field `password`
+        token: $VAULT_ID_TOKEN
+    '''
+    if not isinstance(section, dict) or "id_tokens" not in section:
         return section
-
-    if "id_tokens" not in section:
-        return cast(Section, section)
 
     tokens_aud: List[str] = [token["aud"] for token in section.pop("id_tokens").values()]
 
@@ -53,4 +58,4 @@ def vault_plugin(
     script.insert(0, f"export {variables['VAULT_VAR_NAME']}=$(./some_script_to_fetch_var.sh)")
     section["script"] = script
 
-    return cast(Section, section)
+    return section
