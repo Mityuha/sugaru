@@ -1,4 +1,4 @@
-from typing import Dict, List, TypedDict, Union
+from typing import Any, Dict, List, TypedDict, Union
 
 
 __all__ = ["JSON", "SecName", "Section"]
@@ -16,7 +16,8 @@ JSON = Union[
     float,
     bool,
     None,
-    BaseTypedDict,
 ]
-Section = JSON
+
+# Section = Union[JSON, BaseTypedDict, Mapping[str, Any], Dict[str, Any]]
+Section = Any  # In fact, section is anything at all
 SecName = str

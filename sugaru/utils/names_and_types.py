@@ -6,6 +6,8 @@ from typing import Any, Set, Type, Union
 import typing_extensions
 
 
+__all__ = ["BUILTIN_TYPES", "callable_name", "is_builtin"]
+
 BUILTIN_TYPES: Set[str] = set(dir(builtins) + dir(typing) + dir(typing_extensions))
 
 

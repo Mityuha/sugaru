@@ -3,6 +3,9 @@ from typing import Callable, List, Type
 from ..interfaces import ObjectLoader
 
 
+__all__ = ["load_object_or_raise_error"]
+
+
 def load_object_or_raise_error(
     object_loader: ObjectLoader[Callable],
     *,

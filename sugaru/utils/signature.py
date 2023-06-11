@@ -1,5 +1,6 @@
 from inspect import Signature, isclass, isfunction, signature
-from typing import Any, Dict, Optional, Tuple, Type
+from types import FunctionType
+from typing import Any, Callable, Dict, Optional, Tuple, Type, Union
 
 from ..interfaces import Plugin
 from ..logging import logger
@@ -7,7 +8,16 @@ from ..utils import callable_name
 from .names_and_types import is_builtin
 
 
-def callable_signature(obj: Type[Any]) -> Optional[Signature]:
+__all__ = [
+    "callable_params",
+    "callable_signature",
+    "check_callable_signature",
+    "signature_params",
+    "signature_type_check",
+]
+
+
+def callable_signature(obj: Union[Type[Any], FunctionType]) -> Optional[Signature]:
     sign: Optional[Signature] = None
 
     if isclass(obj) and hasattr(obj, "__call__"):
@@ -24,7 +34,7 @@ def callable_signature(obj: Type[Any]) -> Optional[Signature]:
     return sign
 
 
-def callable_params(
+def signature_params(
     sign: Signature,
     *,
     ignore_names: Tuple = ("self", "args", "kwargs"),
@@ -32,7 +42,20 @@ def callable_params(
     return {p.name: p.annotation for p in sign.parameters.values() if p.name not in ignore_names}
 
 
-def callable_type_check(*, obj_sign: Signature, cls_sign: Signature) -> bool:
+def callable_params(obj: Callable) -> Dict[str, Any]:
+    sign: Optional[Signature]
+    if isfunction(obj):
+        sign = callable_signature(obj)
+    else:
+        sign = callable_signature(type(obj))
+
+    if not sign:
+        raise ValueError(f"Object '{callable_name(obj)}' is not callable")
+
+    return signature_params(sign)
+
+
+def signature_type_check(*, check: Signature, origin: Signature) -> bool:
     logger.info(
         "'type_check' option is not implemented yet"
         "The thing is considering 'dict', 'typing.Dict', 'Mapping' (and so forth) types as the same types"
@@ -52,8 +75,8 @@ def check_callable_signature(
 
     cls_sign: Signature = signature(class_.__call__)
 
-    obj_params: Dict[str, Any] = callable_params(obj_sign)
-    cls_params: Dict[str, Any] = callable_params(cls_sign)
+    obj_params: Dict[str, Any] = signature_params(obj_sign)
+    cls_params: Dict[str, Any] = signature_params(cls_sign)
 
     if class_ is not Plugin:
         if obj_params.keys() != cls_params.keys():
@@ -67,6 +90,6 @@ def check_callable_signature(
             return False
 
     if type_check:
-        return callable_type_check(obj_sign=obj_sign, cls_sign=cls_sign)
+        return signature_type_check(check=obj_sign, origin=cls_sign)
 
     return True

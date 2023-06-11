@@ -1,9 +1,10 @@
 from copy import deepcopy
-from typing import Dict, Mapping, cast
+from typing import Any, Dict, Mapping
 
 from ..interfaces import Plugin
 from ..logging import logger
 from ..types import SecName, Section
+from ..utils import callable_params
 
 
 def simple_plugin_executor(
@@ -22,20 +23,22 @@ def simple_plugin_executor(
 
     for section_name, section in sections.items():
         for plugin_name, plugin in plugins.items():
-            section_to_pass: Section = cast(
-                Section,
-                deepcopy(
-                    sugar_sections.get(section_name, section),
-                ),
-            )
+            plugin_params: Dict[str, Any] = callable_params(plugin)
 
-            new_section: Section = plugin(
-                section_name=section_name,
-                section=section_to_pass,
-                sections=sections,
-            )
+            values: Dict[str, Any] = {
+                "section_name": section_name,
+                "sections": sections,
+            }
+            if "section" in plugin_params:
+                values["section"] = deepcopy(sugar_sections.get(section_name, section))
 
-            if new_section != section_to_pass:
+            kwargs: Dict[str, Any] = {
+                param_name: values[param_name] for param_name in plugin_params
+            }
+
+            new_section: Section = plugin(**kwargs)
+
+            if kwargs.get("section") and new_section != kwargs["section"]:
                 logger.trace(f"Section '{section_name}' was modified by plugin '{plugin_name}'")
 
             sugar_sections[section_name] = new_section

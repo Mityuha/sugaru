@@ -3,6 +3,9 @@ from typing import Dict
 from ..types import JSON, SecName, Section
 
 
+__all__ = ["decode_section", "encode_section"]
+
+
 def encode_section(content: JSON) -> Dict[SecName, Section]:
     if isinstance(content, list):
         return {str(i): item for i, item in enumerate(content)}
