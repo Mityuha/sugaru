@@ -1,7 +1,12 @@
-from typing import Dict, List, Union
+from typing import Dict, List, TypedDict, Union
 
 
 __all__ = ["JSON", "SecName", "Section"]
+
+
+class BaseTypedDict(TypedDict):
+    ...
+
 
 JSON = Union[
     Dict[str, "JSON"],
@@ -11,6 +16,7 @@ JSON = Union[
     float,
     bool,
     None,
+    BaseTypedDict,
 ]
 Section = JSON
 SecName = str

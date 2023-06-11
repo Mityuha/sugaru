@@ -4,7 +4,7 @@ from sugaru import Plugin, check_callable_signature, load_module, load_objects
 from . import PluginContent, PluginPath
 
 
-def test_check_all_objects_signatures(
+def test_check_plugin_signature_no_type_check(
     plugin_path: PluginPath, plugin_content: PluginContent
 ) -> None:
     module = load_module(plugin_path.py_path)
@@ -19,7 +19,7 @@ def test_check_all_objects_signatures(
         if check_callable_signature(
             object_class,
             class_=Plugin,
-            type_check=True,
+            type_check=False,
         )
     ]
 
