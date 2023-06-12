@@ -1,3 +1,4 @@
+from enum import Enum
 from pathlib import Path
 from typing import List
 
@@ -13,7 +14,7 @@ from .interfaces import (
     SectionEncoder,
     SugarFileLoader,
 )
-from .logging import logger
+from .logging import LogLevel, logger, set_log_level
 from .object_loader import SimpleObjectLoader
 from .plugin_executor import simple_plugin_executor
 from .sugarator import sugarate
@@ -39,7 +40,9 @@ def main(
     sec_decoder: str = AUTO,
     plug_executor: str = AUTO,
     type_check: bool = False,
+    log_level: Enum("", {level.name: level.name for level in LogLevel}) = LogLevel.INFO.name,  # type: ignore
 ) -> None:
+    set_log_level(LogLevel[log_level.value])
     file_path: Path = Path(file)
     if not file_path.is_file():
         logger.warning(f"File '{file}' does not exist or is not a file")
