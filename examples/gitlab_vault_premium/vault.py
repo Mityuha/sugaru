@@ -2,8 +2,6 @@ from typing import Any, Dict, List
 
 from typing_extensions import NotRequired, TypedDict
 
-from sugaru import Section
-
 
 class VaultSection(TypedDict):
     id_tokens: NotRequired[Dict[str, Any]]
@@ -12,7 +10,7 @@ class VaultSection(TypedDict):
     script: List[Any]
 
 
-def vault_plugin(section: VaultSection) -> Section:
+def vault_plugin(section: VaultSection) -> Any:
     '''https://docs.gitlab.com/ee/ci/secrets/#use-vault-secrets-in-a-ci-job
       job_using_vault:
     id_tokens:
