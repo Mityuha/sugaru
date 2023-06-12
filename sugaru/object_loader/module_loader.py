@@ -11,8 +11,8 @@ def load_module(plugin_name: str) -> Optional[ModuleType]:
         logger.trace(f"Try to import module by name '{module_name}'")
         try:
             return import_module(module_name)
-        except ModuleNotFoundError:
-            logger.trace(f"Module '{module_name}' import failed.")
+        except ModuleNotFoundError as exc:
+            logger.trace(f"Module '{module_name}' import failed ({exc}).")
             if plugin_name != module_name or "." not in module_name:
                 break
 
