@@ -12,6 +12,6 @@ VALUES: Final[Dict[str, List[Union[str, int]]]] = {
 
 def random_person(section: str) -> Union[str, int]:
     if section not in VALUES:
-        raise ValueError(f"Bad value '{section}'." "Available values: {list(VALUES.keys())}")
+        raise ValueError(f"Bad value '{section}'. " f"Available values: {list(VALUES.keys())}")
 
     return choice(VALUES[section])
