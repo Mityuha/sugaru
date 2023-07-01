@@ -84,16 +84,19 @@ def main(
             type_check=type_check,
         )
     else:
-        if output == STDOUT:
-            sugar_file_writer = stdout_writer_by_extension[file_path.suffix]
-        else:
-            output_path = Path(output)
-            out_ext: str = output_path.suffix
+        write_obj_by_ext = stdout_writer_by_extension
+        out_ext: str = file_path.suffix
 
-            if out_ext not in writer_by_extension:
-                logger.warning(f"cannot find plugin writer by extension '{out_ext}'")
-                return
-            sugar_file_writer = writer_by_extension[out_ext]
+        if output != STDOUT:
+            output_path = Path(output)
+            out_ext = output_path.suffix
+            write_obj_by_ext = writer_by_extension
+
+        if out_ext not in write_obj_by_ext:
+            logger.warning(f"cannot find plugin writer by extension '{out_ext}'")
+            return
+
+        sugar_file_writer = write_obj_by_ext[out_ext]
 
     section_encoder: SectionEncoder = encode_section
     section_decoder: SectionDecoder = decode_section
