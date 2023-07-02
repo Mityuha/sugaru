@@ -438,7 +438,7 @@ six = ">=1.5"
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -622,12 +622,12 @@ docs = ["furo", "jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "rst.linker
 testing = ["big-o", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more-itertools", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)"]
 
 [extras]
-yaml = []
+yaml = ["PyYAML"]
 
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7"
-content-hash = "ba4add212e75bdf9b0451a69954107a0507f4f19d9f31055ae2e228b1d0298c3"
+content-hash = "d9e3f9ef32f21ee5c2349e5464c776f640495af9fbc11a5cddb147e08eeae7ff"
 
 [metadata.files]
 autoflake = [
