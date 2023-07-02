@@ -39,7 +39,6 @@ def main(
     sec_encoder: str = AUTO,
     sec_decoder: str = AUTO,
     plug_executor: str = AUTO,
-    type_check: bool = False,
     log_level: Enum("", {level.name: level.name for level in LogLevel}) = LogLevel.INFO.name,  # type: ignore
 ) -> None:
     set_log_level(LogLevel[log_level.value])
@@ -54,7 +53,7 @@ def main(
             object_loader,
             obj_name=obj_loader,
             class_=ObjectLoader,
-            type_check=type_check,
+            type_check=False,
         )
 
     sugar_file_loader: SugarFileLoader
@@ -63,7 +62,7 @@ def main(
             object_loader,
             obj_name=file_loader,
             class_=SugarFileLoader,
-            type_check=type_check,
+            type_check=False,
         )
     else:
         ext: str = file_path.suffix
@@ -81,7 +80,7 @@ def main(
             object_loader,
             obj_name=file_writer,
             class_=FinalFileWriter,
-            type_check=type_check,
+            type_check=False,
         )
     else:
         write_obj_by_ext = stdout_writer_by_extension
@@ -106,7 +105,7 @@ def main(
             object_loader,
             obj_name=sec_encoder,
             class_=SectionEncoder,
-            type_check=type_check,
+            type_check=False,
         )
 
     if sec_decoder != AUTO:
@@ -114,7 +113,7 @@ def main(
             object_loader,
             obj_name=sec_decoder,
             class_=SectionDecoder,
-            type_check=type_check,
+            type_check=False,
         )
 
     plugin_executor: PluginExecutor = simple_plugin_executor
@@ -123,7 +122,7 @@ def main(
             object_loader,
             obj_name=plug_executor,
             class_=PluginExecutor,
-            type_check=type_check,
+            type_check=False,
         )
 
     sugarate(
@@ -136,7 +135,7 @@ def main(
         section_encoder=section_encoder,
         section_decoder=section_decoder,
         plugin_executor=plugin_executor,
-        type_check=type_check,
+        type_check=False,
     )
 
 
