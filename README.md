@@ -41,7 +41,7 @@ $ pip3 install sugaru
 ## Quickstart
 It's better to see something once than to read documentation a thousand times. Let's follow this principle.    
 You are a kind of DevOps engineer. You write CI files every day. That's why you've learnt by heart some CI stages: literally, line-by-line.   
-One day you've feded up with copy-pasting/writing complete stages into the new project. And you have decided to reduce time and effort to write the same stage the hundredth time.   
+One day you've fed up with copy-pasting/writing complete stages into the new project. And you have decided to reduce time and effort to write the same stage the hundredth time.   
 You took a close look to your stage once again:
 ```yaml
 stages:
@@ -55,7 +55,7 @@ pytest:
   script:
     - poetry run pytest
 ```
-And came up with idea to simply remove it. Indeed, the presence of `python-tests` stage means the same stage code every time. Why not just generate such a stage then? You ended up with the syntax like:
+And came up with idea to simply remove it. Indeed, the presence of some `python-tests` stage can mean the same stage's code every time. Why not just generate such a stage then? You ended up with the syntax like:
 ```yaml
 stages: ""
 python-tests: "python:3.12.0"
@@ -77,7 +77,7 @@ def generate_stages(section_name: str, section: Any, sections: Dict[str, Any]) -
     except KeyError as unknown_stage:
         raise ValueError(f"Unknown stage: {unknown_stage}") from None
 ```
-The second plugin with generate `python-tests` section:
+The second plugin will generate `python-tests` section:
 ```python
 def generate_tests(section_name: str, section: Any) -> Dict[str, Any]:
     if section_name != "python-tests":
@@ -120,14 +120,15 @@ There is also an interesting component called Object Loader. We'll discuss it la
 
 ## Preparations under the hood
 There is the default implementation for every component listed above.    
-Instead of using default components, you can define your own custom component.    
-If you do so, such a component is loaded by Object Loader component.    
+Instead of using default components, you can define your own ones.    
+If you do so, such components are loaded by Object Loader component.    
 
 <p align="left">
   <img width="600px" src="https://github.com/Mityuha/sugaru/assets/17745407/82c4f32c-b3d0-498c-a3fb-68580cf836b3" alt='components-loading'>
 </p>
 
-Actually, you can even implement custom Object Loader. Such a custom Object Loader will be loaded by default Object Loader first and then will *replace* the default one.
+And what about the Object Loader component itself?    
+Actually, you can even implement a custom Object Loader component. Such the custom Object Loader will be loaded by default Object Loader first and then will *replace* the default one.
 
 ## How objects are loaded
 All custom defined objects -- including user plugins -- are loaded by interfaces.    
@@ -156,6 +157,7 @@ def empty_section(section_name: str) -> Any:
     print(section_name)
     return {}
 ```
+The last thing you should known about interface's implementation is that type hints are not validated by sugaru (yet). It's up to you to use type hints for your own purposes.      
 Take a closer look to `interfaces.py` file for more interfaces' detail.
 
 ## Examples
