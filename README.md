@@ -1,6 +1,6 @@
 
 <p align="center">
-  <a href="https://pypi.org/project/sugaru/"><img width="300px" src="https://github.com/Mityuha/sugaru/assets/17745407/c4429d72-8e53-49d5-97c2-f6421c6a320c" alt='sugaru'></a>
+  <a href="https://pypi.org/project/sugaru/"><img width="300px" src="https://github.com/Mityuha/sugaru/assets/17745407/4b25b429-620e-4718-8643-70b11cde0065" alt='sugaru'></a>
 </p>
 <p align="center">
     <em>🍭 Your own syntax you've always been dreaming of. 🍭</em>
@@ -31,7 +31,7 @@ $ pip3 install sugaru
 
 ## Table of contents
    * [Quickstart](#quickstart)
-   * [How it works](#how-it-works)
+   * [How it actually works](#how-it-actually-works)
    * [Preparations under the hood](#preparations-under-the-hood)
    * [How objects are loaded](#how-objects-are-loaded)
    * [Examples](#examples)
@@ -96,12 +96,16 @@ To make it work simply type:
 ```bash
 $ python3 -m sugaru .my-gitlab-ci.yml --plugin python_tests
 ```
-That's it. You will see the correct `.gitlab-ci.yml` syntax output on your screen.
+That's it. You will see the correct `.gitlab-ci.yml` syntax output on your screen.  
+<p align="left">
+  <img width="400px" src="https://github.com/Mityuha/sugaru/assets/17745407/b47f9353-1f95-4407-83fb-13fb18abfa91" alt='how-it-works-no-detail'>
+</p>
+This picture illustrates how sugaru works in a nutshell.
 
-## How it works
+## How it actually works
 There are some classes under the hood that work as a pipeline:    
 <p align="left">
-  <img width="400px" src="https://github.com/Mityuha/sugaru/assets/17745407/2b101211-bf91-46d3-9717-2f121987e713" alt='how-it-works'>
+  <img width="400px" src="https://github.com/Mityuha/sugaru/assets/17745407/c94cda75-b50c-48d8-827b-62d50e9d94f3" alt='how-it-works'>
 </p>
 There is a file path as an entry point parameter (e.g. path to `.my-gitlab-ci.yml`). Then the output of every component is the input of the next component.
 
@@ -124,7 +128,7 @@ Instead of using default components, you can define your own ones.
 If you do so, such components are loaded by Object Loader component.    
 
 <p align="left">
-  <img width="600px" src="https://github.com/Mityuha/sugaru/assets/17745407/82c4f32c-b3d0-498c-a3fb-68580cf836b3" alt='components-loading'>
+  <img width="600px" src="https://github.com/Mityuha/sugaru/assets/17745407/f1c97b38-a469-4d72-900a-c02eff81f956" alt='components-loading'>
 </p>
 
 And what about the Object Loader component itself?    
