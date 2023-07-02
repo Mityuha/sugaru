@@ -29,6 +29,15 @@ Python 3.7+
 $ pip3 install sugaru
 ```
 
+## Table of contents
+   * [Quickstart](#quickstart)
+   * [How it works](#how-it-works)
+   * [Preparations under the hood](#preparations-under-the-hood)
+   * [How objects are loaded](#how-objects-are-loaded)
+   * [Examples](#examples)
+   * [Dependencies](#dependencies)
+   * [Changelog](#changelog)
+
 ## Quickstart
 It's better to see something once than to read documentation a thousand times. Let's follow this principle.    
 You are a kind of DevOps engineer. You write CI files every day. That's why you've learnt by heart some CI stages: literally, line-by-line.   
@@ -89,7 +98,76 @@ $ python3 -m sugaru .my-gitlab-ci.yml --plugin python_tests
 ```
 That's it. You will see the correct `.gitlab-ci.yml` syntax output on your screen.
 
+## How it works
+There are some classes under the hood that work as a pipeline:    
+<p align="left">
+  <img width="400px" src="https://github.com/Mityuha/sugaru/assets/17745407/2b101211-bf91-46d3-9717-2f121987e713" alt='how-it-works'>
+</p>
+There is a file path as an entry point parameter (e.g. path to `.my-gitlab-ci.yml`). Then the output of every component is the input of the next component.
 
+* File Loader  
+  * Output: file content as any JSON type
+* Section Encoder
+  * Output: sections, i.e. mapping section-name: section-content.
+* Plugin Executor
+  * Output: sections after every plugin execution
+* Section Decoder
+  * Output: file content as any JSON type
+* File Writer
+  * Output: the file with the content (including stdout)
 
+There is also an interesting component called Object Loader. We'll discuss it later.
 
+## Preparations under the hood
+There is the default implementation for every component listed above.    
+Instead of using default components, you can define your own custom component.    
+If you do so, such a component is loaded by Object Loader component.    
 
+<p align="left">
+  <img width="600px" src="https://github.com/Mityuha/sugaru/assets/17745407/82c4f32c-b3d0-498c-a3fb-68580cf836b3" alt='components-loading'>
+</p>
+
+Actually, you can even implement custom Object Loader. Such a custom Object Loader will be loaded by default Object Loader first and then will *replace* the default one.
+
+## How objects are loaded
+All custom defined objects -- including user plugins -- are loaded by interfaces.    
+To implement your own component you have to implement the interface dedicated to it.  
+For example, to implement custom Section Encoder you have to implement the following interface:
+```python
+class SectionEncoder(Protocol):
+    def __call__(self, content: JSON) -> Dict[SecName, Section]:
+        ...
+```
+The only exception is user Plugin. A plugin interface is defined as
+```python
+class Plugin(Protocol):
+    def __call__(
+        self,
+        *,
+        section: Section,
+        section_name: str,
+        sections: Mapping[SecName, Section],
+    ) -> Section:
+        ...
+```
+To implement a plugin you should define *any* combination of interfaces' parameters. For example the following implementation also fits:
+```python
+def empty_section(section_name: str) -> Any:
+    print(section_name)
+    return {}
+```
+Take a closer look to `interfaces.py` file for more interfaces' detail.
+
+## Examples
+You will find more examples with detail explanations inside [examples](https://github.com/Mityuha/sugaru/tree/main/examples) folder.
+
+## Dependencies
+
+The only sugaru's dependency is [typer](https://typer.tiangolo.com/). Typer makes sugaru more convenient to use.
+
+## Changelog
+You can see the release history here: https://github.com/Mityuha/sugaru/releases/
+
+---
+
+<p align="center"><i>Sugaru is <a href="https://github.com/Mityuha/sugaru/blob/main/LICENSE">MIT licensed</a> code.</p>
