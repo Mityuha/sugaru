@@ -169,7 +169,10 @@ You will find more examples with detail explanations inside [examples](https://g
 
 ## Dependencies
 
-The only sugaru's dependency is [typer](https://typer.tiangolo.com/). Typer makes sugaru more convenient to use.   
+Sugaru has some default dependencies, that are:
+- [typer](https://typer.tiangolo.com/). Typer makes sugaru more convenient to use.   
+- [pyyaml](https://pyyaml.org/). Sugaru manages to deal with yaml files by default.
+
 You can also install [loguru](https://loguru.readthedocs.io/en/stable/) for more beautiful logs.
 
 ## Changelog
