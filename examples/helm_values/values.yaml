@@ -1,0 +1,3 @@
+replicaCount: minimum
+image: nginx_latest
+service: nginx_8080

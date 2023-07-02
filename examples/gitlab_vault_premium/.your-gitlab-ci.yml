@@ -1,0 +1,15 @@
+stages:
+    - "vault_stage"
+
+job_using_vault:
+  stage: "vault_stage"
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://your-gitlab.com
+  secrets:
+    DATABASE_PASSWORD:
+      vault: production/db/password@ops  # translates to secret `ops/data/production/db`, field `password`
+      token: $VAULT_ID_TOKEN
+
+  script:
+    - echo "Use ${DATABASE_PASSWORD} here"

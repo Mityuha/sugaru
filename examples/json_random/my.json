@@ -1,0 +1,6 @@
+{
+    "first_name": "{first_name}",
+    "second_name": "{second_name}",
+    "age": "{age}",
+    "job_title": "{job_title}"
+}
