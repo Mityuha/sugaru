@@ -165,7 +165,8 @@ You will find more examples with detail explanations inside [examples](https://g
 
 ## Dependencies
 
-The only sugaru's dependency is [typer](https://typer.tiangolo.com/). Typer makes sugaru more convenient to use.
+The only sugaru's dependency is [typer](https://typer.tiangolo.com/). Typer makes sugaru more convenient to use.   
+You can also install [loguru](https://loguru.readthedocs.io/en/stable/) for more beautiful logs.
 
 ## Changelog
 You can see the release history here: https://github.com/Mityuha/sugaru/releases/
