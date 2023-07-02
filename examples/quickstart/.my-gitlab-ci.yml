@@ -1,0 +1,2 @@
+stages: ""
+python-tests: "python:3.12.0"
